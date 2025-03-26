@@ -3,6 +3,9 @@ import FormEditor from '../FormEditor';
 import FormPreview from '../FormPreview';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-phone-number-input/style.css';
+import { getCountries, getCountryCallingCode } from 'react-phone-number-input/input'
+import en from 'react-phone-number-input/locale/en.json'
+import { countries } from 'countries-list';
 
 const FormBuilder = () => {
   const [formTitle, setFormTitle] = useState('Untitled Form');
@@ -17,25 +20,23 @@ const FormBuilder = () => {
 
   const fieldTypes = [
     { label: 'Short Answer', value: 'text', icon: '✏️' },
-    { label: 'Long Answer', value: 'textarea', icon: '📝' },
     { label: 'Multiple Choice', value: 'radio', icon: '⭕' },
     { label: 'Checkboxes', value: 'checkbox', icon: '☑️' },
     { label: 'Dropdown', value: 'dropdown', icon: '▼' },
     { label: 'File Upload', value: 'file', icon: '📎' },
     { label: 'Date', value: 'date', icon: '📅' },
-    { label: 'Time', value: 'time', icon: '⏰' },
     { label: 'Email', value: 'email', icon: '📧' },
     { label: 'Number', value: 'number', icon: '🔢' },
-    { label: 'Rating', value: 'rating', icon: '⭐' },
+    { label: 'Country', value: 'country', icon: '🌍' },
+    { label: 'Phone Number', value: 'phone', icon: '📱' },
   ];
 
   const defaultValidations = {
     text: { required: false, minLength: 0, maxLength: 1000 },
-    textarea: { required: false, minLength: 0, maxLength: 5000 },
     email: { required: false, pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$' },
     number: { required: false, min: null, max: null },
     phone: { required: false },
-    rating: { required: false, max: 5 }
+    country: { required: false }
   };
 
   useEffect(() => {

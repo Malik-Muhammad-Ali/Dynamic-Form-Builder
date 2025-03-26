@@ -1,10 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import PhoneInput from 'react-phone-number-input';
+import { countries } from 'countries-list';
 
 const FormField = ({ field = {}, formData = {}, handleInputChange = () => {} }) => {
   const inputClasses = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200";
   const labelClasses = "block text-sm font-medium text-gray-700 mb-1";
   const optionClasses = "flex items-center space-x-3 p-2 rounded-md hover:bg-gray-50 transition-colors duration-200";
+
+  const countryOptions = Object.entries(countries).map(([code, data]) => ({
+    value: code,
+    label: data.name
+  }));
 
   switch (field.type) {
     case 'time':
@@ -304,6 +311,48 @@ const FormField = ({ field = {}, formData = {}, handleInputChange = () => {} }) 
           {field.description && <p className="text-gray-600 mb-4">{field.description}</p>}
         </motion.div>
       );
+
+    case 'country':
+      return (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="w-full"
+        >
+          <select
+            value={formData[field.id] || ''}
+            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            className={inputClasses}
+            required={field.required}
+          >
+            <option value="">Select a country</option>
+            {countryOptions.map(({ value, label }) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+        </motion.div>
+      );
+
+    case 'phone':
+      return (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="w-full"
+        >
+          <PhoneInput
+            international
+            defaultCountry="US"
+            value={formData[field.id] || ''}
+            onChange={(value) => handleInputChange(field.id, value)}
+            className={inputClasses}
+            required={field.required}
+          />
+        </motion.div>
+      );
+
     default:
       return null;
   }
